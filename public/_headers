@@ -1,0 +1,11 @@
+/*.md
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=10800
+
+/**/*.md
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=10800
+
+/ai-agent.json
+  Content-Type: application/json; charset=utf-8
+  Cache-Control: public, max-age=10800

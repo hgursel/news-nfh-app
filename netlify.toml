@@ -1,0 +1,21 @@
+[build]
+  command = "node src/build.js"
+  publish = "public"
+
+[[headers]]
+  for = "/*.md"
+  [headers.values]
+    Content-Type = "text/plain; charset=utf-8"
+    Cache-Control = "public, max-age=10800"
+
+[[headers]]
+  for = "/**/*.md"
+  [headers.values]
+    Content-Type = "text/plain; charset=utf-8"
+    Cache-Control = "public, max-age=10800"
+
+[[headers]]
+  for = "/ai-agent.json"
+  [headers.values]
+    Content-Type = "application/json; charset=utf-8"
+    Cache-Control = "public, max-age=10800"

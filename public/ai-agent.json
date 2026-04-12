@@ -1,0 +1,15 @@
+{
+  "name": "news.notforhumans.app",
+  "description": "General & tech news feed optimized for AI agents. Plain markdown. Low tokens.",
+  "url": "https://news.notforhumans.app",
+  "index": "https://news.notforhumans.app/index.md",
+  "format": "text/plain; charset=utf-8",
+  "update_frequency": "every 3 hours",
+  "article_count": 39,
+  "retention": "24 hours rolling",
+  "auth_required": false,
+  "sources": [
+    "NPR",
+    "CBS News"
+  ]
+}

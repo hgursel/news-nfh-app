@@ -1,0 +1,16 @@
+{
+  "name": "news-nfh-app",
+  "version": "1.0.0",
+  "description": "Markdown-first news feeds for AI agents",
+  "scripts": {
+    "build": "node src/build.js"
+  },
+  "keywords": ["ai", "agents", "news", "markdown", "rss"],
+  "author": "notforhumans.app",
+  "license": "MIT",
+  "dependencies": {
+    "date-fns": "^4.1.0",
+    "rss-parser": "^3.13.0",
+    "slugify": "^1.6.9"
+  }
+}
