@@ -2,6 +2,12 @@
   command = "node src/build.js"
   publish = "public"
 
+# Serve index.md as the root page
+[[redirects]]
+  from = "/"
+  to = "/index.md"
+  status = 200
+
 [[headers]]
   for = "/*.md"
   [headers.values]
