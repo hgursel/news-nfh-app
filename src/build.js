@@ -35,23 +35,24 @@ function stripHtml(html) {
     .trim();
 }
 
+function truncateSummary(text, maxLen = 120) {
+  if (text.length <= maxLen) return text;
+  const truncated = text.slice(0, maxLen);
+  const lastSpace = truncated.lastIndexOf(' ');
+  return (lastSpace > 80 ? truncated.slice(0, lastSpace) : truncated) + '...';
+}
+
 function articleToMarkdown(article) {
   const summary = stripHtml(article.contentSnippet || article.content || article.summary || '');
   return [
     `# ${article.title}`,
     '',
-    `**source:** ${article.source}`,
-    `**published:** ${article.isoDate}`,
-    `**category:** ${article.category}`,
-    `**url:** ${article.link}`,
+    `source: ${article.source} | published: ${article.isoDate} | category: ${article.category}`,
+    `url: ${article.link}`,
     '',
     '---',
     '',
     summary,
-    '',
-    '---',
-    '',
-    '*fetched by notforhumans.app | updated every 3h*',
     '',
   ].join('\n');
 }
@@ -159,18 +160,40 @@ async function build() {
     const filePath = path.join(articleDir, `${slug}.md`);
     const urlPath = `/${dateDir}/${slug}.md`;
 
+    const summary = stripHtml(article.contentSnippet || article.content || article.summary || '');
+
     fs.writeFileSync(filePath, articleToMarkdown(article), 'utf-8');
-    articleEntries.push({ title: article.title, path: urlPath });
+    articleEntries.push({
+      title: article.title,
+      path: urlPath,
+      source: article.source,
+      category: article.category,
+      time: format(date, 'HH:mm'),
+      summary: truncateSummary(summary),
+    });
   }
+
+  // Compute category counts and unique sources
+  const catCounts = {};
+  for (const e of articleEntries) {
+    catCounts[e.category] = (catCounts[e.category] || 0) + 1;
+  }
+  const catLine = Object.entries(catCounts).map(([c, n]) => `${c} (${n})`).join(', ');
+  const sources = [...new Set(articleEntries.map(e => e.source))].join(', ');
 
   // Generate index.md
   const now = new Date().toISOString();
   const indexLines = [
     '# news.notforhumans.app',
-    `**updated:** ${now}`,
-    `**articles:** ${articleEntries.length}`,
+    `**updated:** ${now} | **articles:** ${articleEntries.length} | **sources:** ${sources}`,
+    `**categories:** ${catLine}`,
+    `**retention:** 24h rolling | **refresh:** 3h | **format:** markdown`,
     '',
-    ...articleEntries.map(e => `- [${e.title}](${e.path})`),
+    '## articles',
+    '',
+    ...articleEntries.map(e =>
+      `- ${e.time} | ${e.category} | ${e.source} | [${e.title}](${e.path}) -- ${e.summary}`
+    ),
     '',
   ];
   fs.writeFileSync(path.join(PUBLIC_DIR, 'index.md'), indexLines.join('\n'), 'utf-8');
@@ -186,7 +209,8 @@ async function build() {
     article_count: articleEntries.length,
     retention: '24 hours rolling',
     auth_required: false,
-    sources: ['NPR', 'CBS News'],
+    categories: Object.keys(catCounts),
+    sources: [...new Set(articleEntries.map(e => e.source))],
   };
   fs.writeFileSync(
     path.join(PUBLIC_DIR, 'ai-agent.json'),
