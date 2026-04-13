@@ -105,7 +105,7 @@ function cleanGeneratedFiles() {
     }
   }
   // Remove generated index and ai-agent.json
-  for (const file of ['index.md', 'ai-agent.json']) {
+  for (const file of ['index.md', 'index.html', 'ai-agent.json']) {
     const filePath = path.join(PUBLIC_DIR, file);
     if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
   }
@@ -204,6 +204,17 @@ async function build() {
     '',
   ];
   fs.writeFileSync(path.join(PUBLIC_DIR, 'index.md'), indexLines.join('\n'), 'utf-8');
+
+  // Generate index.html (minimal wrapper for ChatGPT and browser compatibility)
+  const escapeHtml = (str) => str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const indexHtml = [
+    '<!DOCTYPE html>',
+    '<html><head><meta charset="utf-8"><title>news.notforhumans.app</title></head>',
+    '<body><pre>',
+    ...indexLines.map(escapeHtml),
+    '</pre></body></html>',
+  ].join('\n');
+  fs.writeFileSync(path.join(PUBLIC_DIR, 'index.html'), indexHtml, 'utf-8');
 
   // Generate ai-agent.json
   const agentJson = {
