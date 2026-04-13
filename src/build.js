@@ -12,6 +12,8 @@ const FEEDS = [
   { url: 'https://feeds.npr.org/1004/rss.xml', source: 'npr.org', category: 'world' },
   { url: 'https://feeds.npr.org/1003/rss.xml', source: 'npr.org', category: 'national' },
   { url: 'https://www.cbsnews.com/latest/rss/main', source: 'cbsnews.com', category: 'general' },
+  { url: 'https://feeds.feedburner.com/TheHackersNews', source: 'thehackernews.com', category: 'cybersecurity' },
+  { url: 'https://www.cisa.gov/cybersecurity-advisories/all.xml', source: 'cisa.gov', category: 'cybersecurity' },
 ];
 
 const PUBLIC_DIR = path.join(__dirname, '..', 'public');
