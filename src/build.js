@@ -185,6 +185,11 @@ async function build() {
   const now = new Date().toISOString();
   const indexLines = [
     '# news.notforhumans.app',
+    `> AI-readable news feed. Fetch this index for headlines with summaries.`,
+    `> Each line: \`TIME | CATEGORY | SOURCE | [title](url) -- summary\``,
+    `> Filter by category (${Object.keys(catCounts).join(', ')}) or source (${sources}).`,
+    `> Full article: GET any linked .md path. Service info: GET /ai-agent.json`,
+    '',
     `**updated:** ${now} | **articles:** ${articleEntries.length} | **sources:** ${sources}`,
     `**categories:** ${catLine}`,
     `**retention:** 24h rolling | **refresh:** 3h | **format:** markdown`,
